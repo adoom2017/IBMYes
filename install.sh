@@ -13,8 +13,9 @@ create_mainfest_file(){
     echo "内存大小：${IBM_MEM_SIZE}"
     UUID=$(cat /proc/sys/kernel/random/uuid)
     echo "生成随机UUID：${UUID}"
-    WSPATH=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 16)
-    echo "生成随机WebSocket路径：${WSPATH}"
+    #WSPATH=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 16)
+    WSPATH=about
+    #echo "生成随机WebSocket路径：${WSPATH}"
     
     cat >  ${SH_PATH}/IBMYes/v2ray-cloudfoundry/manifest.yml  << EOF
     applications:
@@ -29,7 +30,7 @@ EOF
         "inbounds": [
             {
                 "port": 8080,
-                "protocol": "vmess",
+                "protocol": "vless",
                 "settings": {
                     "clients": [
                         {
@@ -103,8 +104,8 @@ install(){
     VMESSCODE=$(base64 -w 0 << EOF
     {
       "v": "2",
-      "ps": "ibmyes",
-      "add": "ibmyes.us-south.cf.appdomain.cloud",
+      "ps": "${IBM_HOST_NAME}",
+      "add": "${IBM_HOST_NAME}.us-south.cf.appdomain.cloud",
       "port": "443",
       "id": "${UUID}",
       "aid": "4",
