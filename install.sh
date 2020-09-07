@@ -8,14 +8,18 @@ create_mainfest_file(){
     echo "应用名称：${IBM_APP_NAME}"
     read -p "请输入你的应用内存大小(默认256)：" IBM_MEM_SIZE
     if [ -z "${IBM_MEM_SIZE}" ];then
-    IBM_MEM_SIZE=256
+        IBM_MEM_SIZE=256
     fi
     echo "内存大小：${IBM_MEM_SIZE}"
+    read -p "请输入V2ray协议类型：" V2RAY_PROTOCAL
+    echo "V2ray协议类型：" ${V2RAY_PROTOCAL}
     UUID=$(cat /proc/sys/kernel/random/uuid)
     echo "生成随机UUID：${UUID}"
-    #WSPATH=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 16)
-    WSPATH=about
-    #echo "生成随机WebSocket路径：${WSPATH}"
+    read -p "请输入路径（空，自动生成）：" V2RAY_PATH
+    if [ -z "${V2RAY_PATH}" ];then
+        V2RAY_PATH=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 16)
+    fi
+    echo "V2ray WebSocket路径：${V2RAY_PATH}"
     
     cat >  ${SH_PATH}/IBMYes/v2ray-cloudfoundry/manifest.yml  << EOF
     applications:
@@ -30,7 +34,7 @@ EOF
         "inbounds": [
             {
                 "port": 8080,
-                "protocol": "vless",
+                "protocol": "${V2RAY_PROTOCAL}",
                 "settings": {
                     "clients": [
                         {
@@ -42,7 +46,7 @@ EOF
                 "streamSettings": {
                     "network":"ws",
                     "wsSettings": {
-                        "path": "${WSPATH}"
+                        "path": "${V2RAY_PATH}"
                     }
                 }
             }
@@ -99,8 +103,8 @@ install(){
     echo "Y" | ibmcloud cf install
     ibmcloud cf push
     echo "安装完成。"
-    echo "生成的随机 UUID：${UUID}"
-    echo "生成的随机 WebSocket路径：${WSPATH}"
+    echo "UUID：${UUID}"
+    echo "WebSocket路径：${V2RAY_PATH}"
     VMESSCODE=$(base64 -w 0 << EOF
     {
       "v": "2",
@@ -108,11 +112,11 @@ install(){
       "add": "${IBM_HOST_NAME}.us-south.cf.appdomain.cloud",
       "port": "443",
       "id": "${UUID}",
-      "aid": "4",
+      "aid": "64",
       "net": "ws",
       "type": "none",
       "host": "",
-      "path": "${WSPATH}",
+      "path": "${V2RAY_PATH}",
       "tls": "tls"
     }
 EOF
