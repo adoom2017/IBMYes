@@ -11,7 +11,8 @@ create_mainfest_file(){
         IBM_MEM_SIZE=256
     fi
     echo "内存大小：${IBM_MEM_SIZE}"
-    read -p "请输入V2ray协议类型：" V2RAY_PROTOCAL
+    #read -p "请输入V2ray协议类型：" V2RAY_PROTOCAL
+    V2RAY_PROTOCAL=vmess
     echo "V2ray协议类型：" ${V2RAY_PROTOCAL}
     UUID=$(cat /proc/sys/kernel/random/uuid)
     echo "生成随机UUID：${UUID}"
@@ -39,7 +40,7 @@ EOF
                     "clients": [
                         {
                             "id": "${UUID}",
-                            "alterId": 4
+                            "alterId": 64
                         }
                     ]
                 },
