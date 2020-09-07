@@ -22,15 +22,18 @@ create_mainfest_file(){
     fi
     echo "V2ray WebSocket路径：${V2RAY_PATH}"
     
-    cat >  ${SH_PATH}/IBMYes/v2ray-cloudfoundry/manifest.yml  << EOF
+    cat >  ${SH_PATH}/cloud/v2ray-cloudfoundry/manifest.yml  << EOF
     applications:
     - path: .
       name: ${IBM_APP_NAME}
-      random-route: true
+      random-route: false
+      buildpack: go_buildpack
+      command: ./v2ray/v2ray -config ./v2ray/config.json
+      health-check-type: port
       memory: ${IBM_MEM_SIZE}M
 EOF
 
-    cat >  ${SH_PATH}/IBMYes/v2ray-cloudfoundry/v2ray/config.json  << EOF
+    cat >  ${SH_PATH}/cloud/v2ray-cloudfoundry/v2ray/config.json  << EOF
     {
         "inbounds": [
             {
@@ -65,12 +68,8 @@ EOF
 
 clone_repo(){
     echo "进行初始化。。。"
-    git clone https://github.com/adoom2017/IBMYes
-    cd IBMYes
-    git submodule update --init --recursive
-    cd v2ray-cloudfoundry/v2ray
-    # Upgrade V2Ray to the latest version
-    rm v2ray v2ctl
+    git clone https://github.com/adoom2017/cloud
+    cd cloud/bin/v2ray
     
     # Script from https://github.com/v2fly/fhs-install-v2ray/blob/master/install-release.sh
     # Get V2Ray release version number
@@ -93,15 +92,15 @@ clone_repo(){
     rm latest-v2ray.zip
     
     chmod 0755 ./*
-    cd ${SH_PATH}/IBMYes/v2ray-cloudfoundry
+    cd ${SH_PATH}/cloud/bin
     echo "初始化完成。"
 }
 
 install(){
     echo "进行安装。。。"
-    cd ${SH_PATH}/IBMYes/v2ray-cloudfoundry
+    cd ${SH_PATH}/cloud/bin
     ibmcloud target --cf
-    echo "Y" | ibmcloud cf install
+    echo "y" | ibmcloud cf install
     ibmcloud cf push
     echo "安装完成。"
     echo "UUID：${UUID}"
