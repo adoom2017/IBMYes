@@ -22,7 +22,7 @@ create_mainfest_file(){
     fi
     echo "V2ray WebSocket路径：${V2RAY_PATH}"
     
-    cat >  ${SH_PATH}/cloud/v2ray-cloudfoundry/manifest.yml  << EOF
+    cat >  ${SH_PATH}/cloud/bin/manifest.yml  << EOF
     applications:
     - path: .
       name: ${IBM_APP_NAME}
@@ -33,7 +33,7 @@ create_mainfest_file(){
       memory: ${IBM_MEM_SIZE}M
 EOF
 
-    cat >  ${SH_PATH}/cloud/v2ray-cloudfoundry/v2ray/config.json  << EOF
+    cat >  ${SH_PATH}/cloud/bin/v2ray/config.json  << EOF
     {
         "inbounds": [
             {
