@@ -1,0 +1,8 @@
+applications:
+- path: .
+  name: v2ray
+  random-route: false
+  buildpack: go_buildpack
+  command: ./v2ray/v2ray -config ./v2ray/config.json
+  health-check-type: port
+  memory: 256M

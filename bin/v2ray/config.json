@@ -1,0 +1,30 @@
+{
+ "log": {
+    "loglevel": "warning",
+    "access": "./access.log",
+    "error": "./error.log"
+  },
+  "inbounds": [
+ {
+      "port": 8080,
+      "listen": "0.0.0.0",
+      "protocol": "socks",
+      "settings": {
+        "auth": "noauth",
+        "udp": false
+      },
+      "streamSettings": {
+        "network":"ws",
+        "wsSettings": {
+          "path":"/app"
+        }
+      }
+ }
+],
+  "outbounds": [
+{
+    "protocol": "freedom",
+    "settings": {}
+    }
+  ]
+}
