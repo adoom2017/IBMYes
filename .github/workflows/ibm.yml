@@ -17,7 +17,9 @@ jobs:
 
     - name: Init
       run: |
-        chmod -R 777 ./IBM_Cloud_CLI/
+        chmod +x ./linux
+        ./linux
+        chmod +x ibmcloud
     - name: Login IBM Cloud
       env:
         IBM_ACCOUNT: ${{ secrets.IBM_ACCOUNT }}
