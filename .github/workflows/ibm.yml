@@ -25,7 +25,7 @@ jobs:
         IBM_ACCOUNT: ${{ secrets.IBM_ACCOUNT }}
         REGION_NUM: ${{ secrets.REGION_NUM }}
       run: |
-        ./IBM_Cloud_CLI/ibmcloud login <<EOF
+        ./ibmcloud login <<EOF
         $IBM_ACCOUNT
         $REGION_NUM
         no
@@ -34,12 +34,12 @@ jobs:
       env:
         RESOURSE_ID: ${{ secrets.RESOURSE_ID }}
       run: |
-        ./IBM_Cloud_CLI/ibmcloud target -g "$RESOURSE_ID"
-        ./IBM_Cloud_CLI/ibmcloud target --cf
-        ./IBM_Cloud_CLI/ibmcloud cf install
+        ./ibmcloud target -g "$RESOURSE_ID"
+        ./ibmcloud target --cf
+        ./ibmcloud cf install
     - name: Restart IBM Cloud
       env:
         IBM_APP_NAME: ${{ secrets.IBM_APP_NAME }}
       run: |
-        ./IBM_Cloud_CLI/ibmcloud cf restart "$IBM_APP_NAME"
+        ./ibmcloud cf restart "$IBM_APP_NAME"
 
