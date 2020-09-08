@@ -27,13 +27,7 @@ create_mainfest_file(){
     - path: .
       name: ${IBM_APP_NAME}
       random-route: false
-      buildpack:
-        - appdbuildpack
-        - go_buildpack
-      env:
-        APPD_AGENT: golang
-      services:
-        - ${IBM_APP_NAME}
+      buildpack: go_buildpack
       command: ./v2ray/v2ray -config ./v2ray/config.json
       health-check-type: port
       memory: ${IBM_MEM_SIZE}M
